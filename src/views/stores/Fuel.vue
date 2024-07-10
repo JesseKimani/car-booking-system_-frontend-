@@ -19,7 +19,7 @@
         <tbody>
           <tr v-for="product in paginatedProducts" :key="product.id">
             <td>{{ product.id }}</td>
-            <td>{{ product.fuel_type }}</td>
+            <td>{{ getFuelType(product.fuel_type) }}</td>
             <td>{{ product.quantity }}</td>
             <td>{{ product.amount_paid }}</td>
             <td>{{ (product.fueled_at) }}</td>
@@ -42,7 +42,9 @@
         <form @submit.prevent="addProduct">
           <div>
             <strong>Fuel Type: </strong>
-            <input v-model="newProduct.fuel_type" placeholder="Petrol/Diesel" required>
+            <select v-model="newProduct.fuel_type" required>
+              <option v-for="fuel_type in fuel_types" :key="fuel_type.id" :value="fuel_type.id">{{ fuel_type.name }}</option>
+            </select>
           </div>
           <div>
             <strong>Quantity(Ltr): </strong>
@@ -73,7 +75,9 @@
         <form @submit.prevent="updateProduct">
           <div>
             <strong>Fuel Type: </strong>
-            <input v-model="currentProduct.fuel_type" placeholder="Petrol/Diesel">
+            <select v-model="currentProduct.fuel_type" required>
+              <option v-for="fuel_type in fuel_types" :key="fuel_type.id" :value="fuel_type.id">{{ fuel_type.name }}</option>
+            </select>
           </div>
           <div>
             <strong>Quantity(Ltr): </strong>
@@ -118,6 +122,7 @@ import { API_ENDPOINT } from '../../config';
 import Compressor from 'compressorjs'
 
 const products = ref([])
+const fuel_types = ref([])
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
@@ -154,6 +159,15 @@ const fetchProducts = async () => {
     console.error('Error fetching fuel records:', error)
   }
 }
+
+const fetchFuelTypes = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/fuel_types`);
+    fuel_types.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const addProduct = async () => {
   try {
@@ -231,9 +245,15 @@ const previousPage = () => {
   }
 }
 
+const getFuelType = (fuelType) => {
+  const fuel_type = fuel_types.value.find(fuel_type => fuel_type.id === fuelType)
+  return fuel_type ? fuel_type.name : 'Unknown'
+}
+
 
 onMounted(() => {
   fetchProducts()
+  fetchFuelTypes()
 })
 </script>
 

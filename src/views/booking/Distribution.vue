@@ -65,6 +65,20 @@
                 </option>
               </select>
             </template>
+            <template v-if="field.name === 'driver_name'">
+              <select v-model="newBooking.driver_name" required>
+                <option v-for="driver in drivers" :key="driver.id" :value="driver.id">
+                  {{ driver.name }}
+                </option>
+              </select>
+            </template>
+            <template v-else-if="field.name === 'client_department'">
+              <select v-model="newBooking.client_department" required>
+                <option v-for="department in departments" :key="department.id" :value="department.id">
+                  {{ department.name }}
+                </option>
+              </select>
+            </template>
             <template v-else>
               <input v-model="newBooking[field.name]" :type="field.type" required />
             </template>
@@ -91,6 +105,20 @@
               <select v-model="currentBooking.asset_id" required>
                 <option v-for="asset in assets" :key="asset.id" :value="asset.id">
                   {{ asset.reg_no }}
+                </option>
+              </select>
+            </template>
+            <template v-else-if="field.name === 'driver_name'">
+              <select v-model="currentBooking.driver_name" required>
+                <option v-for="driver in drivers" :key="driver.id" :value="driver.id">
+                  {{ driver.name }}
+                </option>
+              </select>
+            </template>
+            <template v-else-if="field.name === 'client_department'">
+              <select v-model="currentBooking.client_department" required>
+                <option v-for="department in departments" :key="department.id" :value="department.id">
+                  {{ department.name }}
                 </option>
               </select>
             </template>
@@ -135,6 +163,8 @@ import { API_ENDPOINT } from '../../config';
 const bookings = ref([]);
 const clients = ref([]);
 const assets = ref([]);
+const drivers = ref([]);
+const departments = ref([]);
 const showAddModal = ref(false);
 const showEditModal = ref(false);
 const showViewModal = ref(false);
@@ -199,6 +229,15 @@ const fetchAssets = async () => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/assets`);
     assets.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchDrivers = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/drivers`);
+    drivers.value = response.data;
   } catch (error) {
     console.error(error);
   }
@@ -328,6 +367,7 @@ onMounted(() => {
   fetchBookings();
   fetchClients();
   fetchAssets();
+  fetchDrivers();
 });
 </script>
 

@@ -24,7 +24,7 @@
             <td>{{ customer.email }}</td>
             <td>{{ customer.phone }}</td>
             <td>{{ customer.company }}</td>
-            <td>{{ customer.department }}</td>
+            <td>{{ getDepartmentName(customer.department) }}</td>
             <td>
               <button @click="openEditModal(customer)">Update</button>
               <button @click="openDeleteModal(customer)">Delete</button>
@@ -49,7 +49,11 @@
           <input v-model="newCustomer.address" placeholder="Address" required>
           <input v-model="newCustomer.phone" placeholder="Phone Number" required>
           <input v-model="newCustomer.company" placeholder="Company" required>
-          <input v-model="newCustomer.department" placeholder="Department" required>
+          <select v-model="newCustomer.department" required>
+            <option v-for="department in departments" :key="department.id" :value="department.id">
+              {{ department.name }}
+            </option>
+          </select>
           <input v-model="newCustomer.is_active" type="checkbox"> Active
           <button type="submit">Save</button>
         </form>
@@ -67,7 +71,11 @@
           <input v-model="currentCustomer.address" placeholder="Address" required>
           <input v-model="currentCustomer.phone" placeholder="Phone" required>
           <input v-model="currentCustomer.company" placeholder="Company" required>
-          <input v-model="currentCustomer.department" placeholder="Department" required>
+          <select v-model="currentCustomer.department">
+            <option v-for="department in departments" :key="department.id" :value="department.id">
+              {{ department.name }}
+            </option>
+          </select>
           <input v-model="currentCustomer.is_active" type="checkbox"> Active
           <button type="submit">Save</button>
         </form>
@@ -92,6 +100,7 @@ import Modal from '../components/Modal.vue'
 import { API_ENDPOINT } from '../config'
 
 const customers = ref([])
+const departments = ref([])
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
@@ -122,6 +131,15 @@ const totalPages = computed(() => {
   if (!customers.value) return 1
   return Math.ceil(customers.value.length / rowsPerPage)
 })
+
+const fetchDepartments = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/departments`)
+    departments.value = response.data
+  } catch (error) {
+    console.error('Error fetching departments:', error)
+  }
+}
 
 const fetchCustomers = async () => {
   try {
@@ -201,8 +219,14 @@ const previousPage = () => {
   }
 }
 
+const getDepartmentName = (departmentName) => {
+  const department = departments.value.find(department => department.id === departmentName)
+  return department ? department.name : 'Unknown'
+}
+
 onMounted(() => {
   fetchCustomers()
+  fetchDepartments()
 })
 </script>
 

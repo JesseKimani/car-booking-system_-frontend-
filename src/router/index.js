@@ -21,6 +21,18 @@ import Income from '../views/finance/Income.vue';
 import Reports from '../views/reports/Reports.vue';
 import CarRentalReports from '../views/reports/CarRentalReports.vue';
 import MaintenanceReport from '../views/reports/MaintenanceReport.vue';
+import Settings from '../views/settings/Settings.vue';
+import AreaOffice from '../views/settings/AreaOffice.vue';
+import AssetGroups from '../views/settings/AssetGroups.vue';
+import AssetMakes from '../views/settings/AssetMakes.vue';
+import Drivers from '../views/settings/Drivers.vue';
+import CompanyDepartments from '../views/settings/CompanyDepartments.vue';
+import ExpenseTypes from '../views/settings/ExpenseTypes.vue';
+import FuelTypes from '../views/settings/FuelTypes.vue';
+import PaymentMethods from '../views/settings/PaymentMethods.vue';
+import Positions from '../views/settings/Positions.vue';
+import SupplierCategories from '../views/settings/SupplierCategories.vue';
+
 
 const router = createRouter({
     history: createWebHistory(),
@@ -129,6 +141,63 @@ const router = createRouter({
             path: '/maintenance_reports',
             name: 'MaintenanceReport',
             component: MaintenanceReport
+        },
+        {
+            path: '/settings',
+            name: 'Settings',
+            component: Settings,
+            children: [
+                {
+                    path: '',
+                    name: 'AssetMakes',
+                    component: AssetMakes
+                },
+                {
+                    path: '/settings/asset_groups',
+                    name: 'AssetGroups',
+                    component: AssetGroups
+                },
+                {
+                    path: '/settings/area_offices',
+                    name: 'AreaOffices',
+                    component: AreaOffice
+                },
+                {
+                    path: '/settings/company_departments',
+                    name: 'CompanyDepartments',
+                    component: CompanyDepartments
+                },
+                {
+                    path: '/settings/drivers',
+                    name: 'Drivers',
+                    component: Drivers
+                },
+                {
+                    path: '/settings/expense_types',
+                    name: 'ExpenseTypes',
+                    component: ExpenseTypes
+                },
+                {
+                    path: '/settings/fuel_types',
+                    name: 'FuelTypes',
+                    component: FuelTypes
+                },
+                {
+                    path: '/settings/payment_methods',
+                    name: 'PaymentMethods',
+                    component: PaymentMethods
+                },
+                {
+                    path: '/settings/positions',
+                    name: 'Positions',
+                    component: Positions
+                },
+                {
+                    path: '/settings/supplier_categories',
+                    name: 'SupplierCategories',
+                    component: SupplierCategories
+                },
+            ]
         }
     ]
 })

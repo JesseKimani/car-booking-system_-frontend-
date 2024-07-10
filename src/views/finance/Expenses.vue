@@ -21,7 +21,7 @@
         </thead>
         <tbody>
           <tr v-for="expense in paginatedExpenses" :key="expense.id">
-            <td>{{ expense.expense_type }}</td>
+            <td>{{ getExpenseType(expense.expense_type) }}</td>
             <td>{{ getAssetId(expense.asset_id) }}</td>
             <td>{{ expense.amount }}</td>
             <td>{{ formatDate(expense.action_date) }}</td>
@@ -49,7 +49,9 @@
         <form @submit.prevent="addExpense">
           <div>
             <strong>Expense Type: </strong>
-            <input v-model="newExpense.expense_type" placeholder="Expense Type" required>
+            <select v-model="newExpense.expense_type" required>
+              <option v-for="expense_type in expense_types" :key="expense_type.id" :value="expense_type.id">{{ expense_type.name }}</option>
+            </select>
           </div>
           <div>
             <strong>Asset Id: </strong>
@@ -93,7 +95,9 @@
         <form @submit.prevent="updateExpense">
           <div>
             <strong>Expense Type: </strong>
-            <input v-model="currentExpense.expense_type" placeholder="Expense Type" required>
+            <select v-model="currentExpense.expense_type" required>
+              <option v-for="expense_type in expense_types" :key="expense_type.id" :value="expense_type.id">{{ expense_type.name }}</option>
+            </select>
           </div>
           <div>
             <strong>Asset Id: </strong>
@@ -135,7 +139,7 @@
       <template #header>Expense Details</template>
       <template #body>
         <div v-if="currentExpense">
-          <p><strong>Expense Type:</strong> {{ currentExpense.service_type }}</p>
+          <p><strong>Expense Type:</strong> {{ getExpenseType(currentExpense.expense_type) }}</p>
           <p><strong>Asset Id:</strong> {{ getAssetId(currentExpense.asset_id) }}</p>
           <p><strong>Amount:</strong> {{ currentExpense.amount }}</p>
           <p><strong>Action Date:</strong> {{ formatDate(currentExpense.action_date) }}</p>
@@ -166,6 +170,7 @@ import { API_ENDPOINT } from '../../config'
 const expense = ref([])
 const assets = ref([])
 const clients = ref([])
+const expense_types = ref([])
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
@@ -231,6 +236,15 @@ const fetchClients = async () => {
   try {
     const response = await axios.get(`${API_ENDPOINT}/cust_clients`);
     clients.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchExpenseTypes = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/expense_types`);
+    expense_types.value = response.data;
   } catch (error) {
     console.error(error);
   }
@@ -338,6 +352,11 @@ const getAssetId = (assetId) => {
   return asset ? asset.reg_no : 'Unknown'
 }
 
+const getExpenseType = (expenseType) => {
+  const expense_type = expense_types.value.find(expense_type => expense_type.id === expenseType)
+  return expense_type ? expense_type.name : 'Unknown'
+}
+
 const getClientId = (clientId) => {
   const client = clients.value.find(client => client.id === clientId);
   return client ? `${client.first_name} ${client.last_name}` : 'Unknown';
@@ -348,6 +367,7 @@ onMounted(() => {
   fetchExpenses()
   fetchAssets()
   fetchClients()
+  fetchExpenseTypes()
 })
 </script>
 

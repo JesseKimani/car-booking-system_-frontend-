@@ -48,6 +48,10 @@
         <span class="material-icons">summarize</span>
         <span class="text">Reports</span>
       </router-link>
+      <router-link class="button" to="/settings">
+        <span class="material-icons">settings</span>
+        <span class="text">Settings/Setup Data</span>
+      </router-link>
     </div>
   </aside>
 </template>

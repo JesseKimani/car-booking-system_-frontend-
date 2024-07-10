@@ -21,10 +21,10 @@
           <tr v-for="asset in paginatedAssets" :key="asset.id">
             <td>{{ asset.id }}</td>
             <td>{{ asset.reg_no }}</td>
-            <td>{{ asset.make }}</td>
+            <td>{{ getAssetMake(asset.make) }}</td>
             <td>{{ asset.model }}</td>
             <td>{{ asset.year_of_manufacture }}</td>
-            <td>{{ asset.region }}</td>
+            <td>{{ getAreaOffice(asset.region) }}</td>
             <td>
               <button @click="openEditModal(asset)">Update</button>
               <button @click="openDeleteModal(asset)">Delete</button>
@@ -43,12 +43,20 @@
       <template #body>
         <form @submit.prevent="addAsset">
           <input v-model="newAsset.reg_no" placeholder="Registration No." required>
-          <input v-model="newAsset.make" placeholder="Make" required>
+          <select v-model="newAsset.make" required>
+            <option v-for="asset_make in asset_makes" :key="asset_make.id" :value="asset_make.id">
+              {{ asset_make.name }}
+            </option>
+          </select>
           <input v-model="newAsset.model" placeholder="Model" required>
           <input v-model="newAsset.year_of_manufacture" placeholder="Year of Manufacture" required>
           <input v-model="newAsset.buying_price" placeholder="Buying Price" required>
           <input v-model="newAsset.date_bought" placeholder="Date Bought" type="date" required>
-          <input v-model="newAsset.region" placeholder="Region" required>
+          <select v-model="newAsset.region" required>
+            <option v-for="area_office in area_offices" :key="area_office.id" :value="area_office.id">
+              {{ area_office.name }}
+            </option>
+          </select>
           <input v-model="newAsset.chasis_number" placeholder="Chasis Number" required>
           <input v-model="newAsset.current_mileage" placeholder="Current Mileage" required>
           <input v-model="newAsset.logbook_name" placeholder="Logbook Name" required>
@@ -63,12 +71,20 @@
       <template #body>
         <form @submit.prevent="updateAsset">
           <input v-model="currentAsset.reg_no" placeholder="Registration No." required>
-          <input v-model="currentAsset.make" placeholder="Make" required>
+          <select v-model="currentAsset.make" required>
+            <option v-for="asset_make in asset_makes" :key="asset_make.id" :value="asset_make.id">
+              {{ asset_make.name }}
+            </option>
+          </select>
           <input v-model="currentAsset.model" placeholder="Model" required>
           <input v-model="currentAsset.year_of_manufacture" placeholder="Year of Manufacture" required>
           <input v-model="currentAsset.buying_price" placeholder="Buying Price" required>
           <input v-model="currentAsset.date_bought" placeholder="Date Bought" type="date" required>
-          <input v-model="currentAsset.region" placeholder="Region" required>
+          <select v-model="currentAsset.make" required>
+            <option v-for="area_office in area_offices" :key="area_office.id" :value="area_office.id">
+              {{ area_office.name }}
+            </option>
+          </select>
           <input v-model="currentAsset.chasis_number" placeholder="Chasis Number" required>
           <input v-model="currentAsset.current_mileage" placeholder="Current Mileage" required>
           <input v-model="currentAsset.logbook_name" placeholder="Logbook Name" required>
@@ -96,6 +112,8 @@ import Modal from '../components/Modal.vue'
 import { API_ENDPOINT } from '../config'
 
 const assets = ref([])
+const asset_makes = ref([])
+const area_offices = ref([])
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
@@ -137,6 +155,24 @@ const fetchAssets = async () => {
       console.error('Error fetching assets:', error)
   }
   }
+
+const fetchAreaOffices = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/area_offices`);
+    area_offices.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const fetchAssetMakes = async () => {
+  try {
+    const response = await axios.get(`${API_ENDPOINT}/assets_makes`);
+    asset_makes.value = response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const addAsset = async () => {
   try {
@@ -220,8 +256,20 @@ const previousPage = () => {
   }
   }
 
+const getAssetMake = (assetMake) => {
+  const asset_make = asset_makes.value.find(asset_make => asset_make.id === assetMake)
+  return asset_make ? asset_make.name : 'Unknown'
+}
+
+const getAreaOffice = (areaOffice) => {
+  const area_office = area_offices.value.find(area_office => area_office.id === areaOffice)
+  return area_office ? area_office.name : 'Unknown'
+}
+
 onMounted(() => {
   fetchAssets()
+  fetchAssetMakes()
+  fetchAreaOffices()
   })
 </script>
 

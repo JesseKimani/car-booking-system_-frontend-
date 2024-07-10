@@ -8,7 +8,6 @@
         range-separator="To"
         start-placeholder="Start date"
         end-placeholder="End date"
-        format="YYYY-MM-DD"
       ></el-date-picker>
 
       <el-select v-model="selectedAssets" placeholder="Select Asset" multiple>
@@ -101,45 +100,27 @@ export default {
   },
   methods: {
     async fetchAssets() {
-      try {
-        const response = await axios.get(`${API_ENDPOINT}/assets`);
-        this.assets = response.data;
-      } catch (error) {
-        this.$message.error('Failed to fetch assets');
-      }
+      const response = await axios.get(`${API_ENDPOINT}/assets`);
+      this.assets = response.data;
     },
     async fetchClients() {
-      try {
-        const response = await axios.get(`${API_ENDPOINT}/cust_clients`);
-        this.clients = response.data;
-      } catch (error) {
-        this.$message.error('Failed to fetch clients');
-      }
+      const response = await axios.get(`${API_ENDPOINT}/cust_clients`);
+      this.clients = response.data;
     },
     async generateReport() {
-      if (this.dateRange.length < 2) {
-        this.$message.error('Please select a valid date range');
-        return;
-      }
-
       const params = {
         start_date: this.dateRange[0],
         end_date: this.dateRange[1],
-        asset_ids: this.selectedAssets.join(',') || null,
-        client_ids: this.selectedClients.join(',') || null,
+        asset_ids: this.selectedAssets.join(','),
+        client_ids: this.selectedClients.join(','),
         page: this.currentPage,
         pageSize: 15,
       };
-
-      try {
-        const response = await axios.get(`${API_ENDPOINT}/car_rental_reports`, { params });
-        this.reports = response.data.rows.sort((a, b) => new Date(a.action_date) - new Date(b.action_date));
-        this.totalReports = response.data.count;
-        this.totalAmount = this.reports.reduce((sum, report) => sum + parseFloat(report.amount), 0);
-      } catch (error) {
-        console.error('Error generating report:', error);
-        this.$message.error(error.response?.data?.error || 'Failed to generate report');
-      }
+      const response = await axios.get(`${API_ENDPOINT}/car_rental_reports`, { params });
+      this.reports = response.data.rows.sort((a, b) => new Date(a.action_date) - new Date(b.action_date));
+      this.totalReports = response.data.count;
+      this.totalAmount = this.reports.reduce((sum, report) => sum + parseFloat(report.amount), 0);
+      console.log("Report generated", this.reports);
     },
     handlePageChange(page) {
       this.currentPage = page;
@@ -214,6 +195,7 @@ export default {
 .el-date-picker,
 .el-select {
   width: 50%;
+
   max-width: 200px;
 }
 </style>
