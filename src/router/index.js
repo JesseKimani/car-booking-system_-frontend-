@@ -130,7 +130,8 @@ const router = createRouter({
         {
             path: '/reports',
             name: 'Reports',
-            component: Reports
+            component: Reports,
+            meta: { requiresAuth: true}
         },
         {
             path: '/car_rental_reports',
@@ -146,6 +147,7 @@ const router = createRouter({
             path: '/settings',
             name: 'Settings',
             component: Settings,
+            meta: { requiresAuth: true},
             children: [
                 {
                     path: '',
