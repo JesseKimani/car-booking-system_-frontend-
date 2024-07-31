@@ -18,9 +18,9 @@ import Leases from '../views/booking/Leases.vue';
 import Finance from '../views/finance/Finance.vue';
 import Expenses from '../views/finance/Expenses.vue';
 import Income from '../views/finance/Income.vue';
-import Reports from '../views/reports/Reports.vue';
-import CarRentalReports from '../views/reports/CarRentalReports.vue';
-import MaintenanceReport from '../views/reports/MaintenanceReport.vue';
+// import Reports from '../views/reports/Reports.vue';
+// import CarRentalReports from '../views/reports/CarRentalReports.vue';
+// import MaintenanceReport from '../views/reports/MaintenanceReport.vue';
 import Settings from '../views/settings/Settings.vue';
 import AreaOffice from '../views/settings/AreaOffice.vue';
 import AssetGroups from '../views/settings/AssetGroups.vue';
@@ -127,22 +127,22 @@ const router = createRouter({
                 },
             ],
         },
-        {
-            path: '/reports',
-            name: 'Reports',
-            component: Reports,
-            meta: { requiresAuth: true}
-        },
-        {
-            path: '/car_rental_reports',
-            name: 'CarRentalReports',
-            component: CarRentalReports
-        },
-        {
-            path: '/maintenance_reports',
-            name: 'MaintenanceReport',
-            component: MaintenanceReport
-        },
+        // {
+        //     path: '/reports',
+        //     name: 'Reports',
+        //     component: Reports,
+        //     meta: { requiresAuth: true}
+        // },
+        // {
+        //     path: '/car_rental_reports',
+        //     name: 'CarRentalReports',
+        //     component: CarRentalReports
+        // },
+        // {
+        //     path: '/maintenance_reports',
+        //     name: 'MaintenanceReport',
+        //     component: MaintenanceReport
+        // },
         {
             path: '/settings',
             name: 'Settings',

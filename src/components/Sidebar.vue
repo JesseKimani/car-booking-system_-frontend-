@@ -1,7 +1,7 @@
 <template>
   <aside :class="`${is_expanded && 'is-expanded'}`">
     <div class="logo">
-      <img src="../assets/fgtlogo.png" alt="FGT">
+      <img src="../assets/vue.svg" alt="FGT">
     </div>
 
     <div class="menu-toggle-wrap">
@@ -18,7 +18,7 @@
       </router-link>
       <router-link class="button" to="/assets">
         <span class="material-icons">directions_car</span>
-        <span class="text">Assets</span>
+        <span class="text">Vehicles</span>
       </router-link>
       <router-link class="button" to="/bookings">
         <span class="material-icons">event_available</span>
@@ -26,7 +26,7 @@
       </router-link>
       <router-link class="button" to="/customers">
         <span class="material-icons">group</span>
-        <span class="text">Customers</span>
+        <span class="text">Users</span>
       </router-link>
       <router-link class="button" to="/suppliers">
         <span class="material-icons">groups</span>
@@ -44,10 +44,10 @@
         <span class="material-icons">paid</span>
         <span class="text">Finance</span>
       </router-link>
-      <router-link class="button" to="/reports">
+      <!-- <router-link class="button" to="/reports">
         <span class="material-icons">summarize</span>
         <span class="text">Reports</span>
-      </router-link>
+      </router-link> -->
       <router-link class="button" to="/settings">
         <span class="material-icons">settings</span>
         <span class="text">Settings/Setup Data</span>

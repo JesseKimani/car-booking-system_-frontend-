@@ -3,7 +3,7 @@
     <Sidebar />
     <div class="main-content">
       <header>
-        <h1>Fleet and Transport Management System
+        <h1>Car Booking System
           <div class="profile-container" @click="toggleDropdown">
             <!-- <span class="material-icons">account_circle</span> -->
             <div class="initials">{{ userInitials }}</div>
